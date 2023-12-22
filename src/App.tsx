@@ -50,7 +50,7 @@ const App: React.FC = () => {
     if (isTimerActive && masterTimer > 0) {
       timer = setInterval(() => {
         setMasterTimer(prev => prev - 1);
-        if (masterTimer === 0) {
+        if (masterTimer === 1) {
           setIsTimerActive(false);
           new Audio('/bells.wav').play();
         }
