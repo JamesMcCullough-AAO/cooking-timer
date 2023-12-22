@@ -50,10 +50,13 @@ const App: React.FC = () => {
     if (isTimerActive && masterTimer > 0) {
       timer = setInterval(() => {
         setMasterTimer(prev => prev - 1);
+        if (masterTimer === 0) {
+          setIsTimerActive(false);
+          new Audio('/bells.wav').play();
+        }
       }, 1000); // Every second
     } else if (masterTimer === 0) {
       setIsTimerActive(false); // Stop the timer when it reaches 0
-      new Audio('/bells.wav').play();
     }
 
     return () => {
