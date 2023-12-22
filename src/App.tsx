@@ -104,6 +104,21 @@ const App: React.FC = () => {
       >
         Reset
       </Button>
+      <Button
+        colorScheme="blue"
+        onClick={() => {
+          const time = prompt('Set the Time in Minutes');
+          if (time) {
+            setMasterTimer(parseInt(time)*60);
+          }
+        }}
+        mt="4"
+        disabled={isTimerActive}
+        isDisabled={isTimerActive}
+      >
+        Set Timer
+      </Button>
+      
       </HStack>
       <HStack
       justifyContent="space-between"
@@ -120,6 +135,7 @@ const App: React.FC = () => {
          flexDirection="column"
         >
       <Text fontSize="8xl" mt="4" textAlign="center" width="100%"
+      color={isTimerActive ? 'white': 'blue.300'}
       >
         {Math.floor(masterTimer / 60)}:{(masterTimer % 60).toString().padStart(2, '0')}
       </Text>
