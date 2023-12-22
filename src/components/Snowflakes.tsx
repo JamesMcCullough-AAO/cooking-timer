@@ -10,6 +10,7 @@ const Snowflake = () => {
           left: `${Math.random() * 100}%`,
           animationDelay: `${Math.random() * 10}s`,
           fontSize: `${Math.random() * 40 + 10}px`,
+          rotate: `${Math.random() * 360}deg`,
         }}
       >
         ❄

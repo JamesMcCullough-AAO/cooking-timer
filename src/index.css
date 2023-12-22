@@ -14,8 +14,7 @@ code {
 
 @keyframes snowfall {
   0% { top: -10%; }
-  100% { top: 100%;
-    rotate: 60deg; }
+  100% { top: 100%; }
 }
 
 .snowflake {
