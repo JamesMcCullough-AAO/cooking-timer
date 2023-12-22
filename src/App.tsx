@@ -35,6 +35,10 @@ const App: React.FC = () => {
   return (
     <div>
       <AddItemForm onAdd={addItem} />
+      <HStack
+      flex="1"
+      justifyContent="center"
+      >
       <Button
         colorScheme={isTimerActive ? 'red' : 'green'}
         onClick={() => 
@@ -52,6 +56,7 @@ const App: React.FC = () => {
       >
         {isTimerActive ? 'Pause' : 'Start'}
       </Button>
+      </HStack>
       <HStack
       justifyContent="space-between"
       height="80vh"
@@ -78,7 +83,7 @@ const App: React.FC = () => {
          flexDirection="column"
          justifyContent="center"
         >
-      <ItemList items={items} masterTimer={masterTimer} />
+      <ItemList items={items} masterTimer={masterTimer} isTimerActive={isTimerActive} />
         </Box>
       </HStack>
     </div>

@@ -10,16 +10,17 @@ export interface Item {
   interface ItemListProps {
     items: Item[];
     masterTimer: number;
+    isTimerActive: boolean;
   }
   
-  export const ItemList: React.FC<ItemListProps> = ({ items, masterTimer }) => {
+  export const ItemList: React.FC<ItemListProps> = ({ items, masterTimer, isTimerActive }) => {
   
     const playedSoundsRef = useRef<Set<number>>(new Set());
 
     useEffect(() => {
         items.forEach((item, index) => {
         const beginIn = masterTimer - item.duration;
-        if (beginIn === 0 && !playedSoundsRef.current.has(index)) {
+        if (beginIn === 0 && !playedSoundsRef.current.has(index) && isTimerActive) {
             new Audio('/alarm.mp3').play();
             playedSoundsRef.current.add(index);
         }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Input, HStack } from '@chakra-ui/react';
+import { Button, Input, HStack, IconButton } from '@chakra-ui/react';
+import AddIcon from '@mui/icons-material/Add';
 
 interface AddItemFormProps {
   onAdd: (name: string, time: number) => void;
@@ -18,7 +19,7 @@ export const AddItemForm: React.FC<AddItemFormProps> = ({ onAdd }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <HStack mt="4">
+      <HStack mt="4" marginRight="30" marginLeft="30" marginTop="5">
         <Input 
           placeholder="Item name" 
           value={name} 
@@ -30,7 +31,12 @@ export const AddItemForm: React.FC<AddItemFormProps> = ({ onAdd }) => {
           value={time} 
           onChange={(e) => setTime(e.target.value)} 
         />
-        <Button type="submit" colorScheme="blue">Add Item</Button>
+        <IconButton 
+        aria-label="Add item"
+        icon={<AddIcon />}
+        type="submit" 
+        colorScheme="blue"
+        />
       </HStack>
     </form>
   );
