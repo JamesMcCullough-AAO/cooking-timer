@@ -4,11 +4,13 @@ import AddIcon from '@mui/icons-material/Add';
 
 interface AddItemFormProps {
   onAdd: (name: string, time: number) => void;
+  initialName?: string;
+  initialTime?: string;
 }
 
-export const AddItemForm: React.FC<AddItemFormProps> = ({ onAdd }) => {
-  const [name, setName] = useState('');
-  const [time, setTime] = useState('');
+export const AddItemForm: React.FC<AddItemFormProps> = ({ onAdd, initialName = '', initialTime = '' }) => {
+  const [name, setName] = useState(initialName);
+  const [time, setTime] = useState(initialTime);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,7 +21,7 @@ export const AddItemForm: React.FC<AddItemFormProps> = ({ onAdd }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <HStack mt="4" marginRight="30" marginLeft="30" marginTop="5">
+      <HStack mt="4">
         <Input 
           placeholder="Item name" 
           value={name} 

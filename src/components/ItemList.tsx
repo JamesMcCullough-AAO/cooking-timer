@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { Box, HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, HStack, IconButton, Text, VStack } from '@chakra-ui/react';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 export interface Item {
     name: string;
@@ -11,9 +13,37 @@ export interface Item {
     items: Item[];
     masterTimer: number;
     isTimerActive: boolean;
+    handleEdit: (item: Item) => void;
+    handleRemove: (item: Item) => void;
+  }
+
+  type ListItemIconButtonsProps = {
+    item: Item;
+    handleEdit: (item: Item) => void;
+    handleRemove: (item: Item) => void;
+  }
+
+  const ListItemIconButtons = ({item, handleEdit, handleRemove}: ListItemIconButtonsProps) => {
+    return (
+      <HStack  marginTop="4">
+            <IconButton
+        aria-label="Edit item"
+        colorScheme='yellow'
+        icon={<EditIcon />}
+        onClick={() => handleEdit(item)}
+       
+      />
+      <IconButton
+        aria-label="Remove item"
+        icon={<DeleteForeverIcon />}
+        colorScheme='red'
+        onClick={() => handleRemove(item)}
+      />
+            </HStack>
+    )
   }
   
-  export const ItemList: React.FC<ItemListProps> = ({ items, masterTimer, isTimerActive }) => {
+  export const ItemList: React.FC<ItemListProps> = ({ items, masterTimer, isTimerActive, handleEdit, handleRemove }) => {
   
     const playedSoundsRef = useRef<Set<number>>(new Set());
 
@@ -21,7 +51,7 @@ export interface Item {
         items.forEach((item, index) => {
         const beginIn = masterTimer - item.duration;
         if (beginIn === 0 && !playedSoundsRef.current.has(index) && isTimerActive) {
-            new Audio('/alarm.mp3').play();
+            new Audio('/bells.wav').play();
             playedSoundsRef.current.add(index);
         }
         });
@@ -41,6 +71,8 @@ export interface Item {
     return (
         <HStack
         height="100%"
+        backgroundColor="black"
+        color="white"
         >
         <VStack mt="4" flex="1" alignItems="start" border="1px" borderColor="gray.400" borderRadius="md" p="4" height="100%"
         >
@@ -48,7 +80,7 @@ export interface Item {
           const beginIn = Math.max(masterTimer - item.duration, 0);
           return (
               <Box
-              backgroundColor={beginIn === 0 ? 'green.200' : 'gray.100'}
+              backgroundColor='gray.600'
               p="4"
               borderRadius="md"
               key={index}
@@ -57,6 +89,7 @@ export interface Item {
             <Text key={index}>
               {item.name} - Begin in {formatTime(beginIn)}
             </Text>
+            <ListItemIconButtons item={item} handleEdit={handleEdit} handleRemove={handleRemove} />
                   </Box>
           );
         })}
@@ -65,7 +98,7 @@ export interface Item {
           {itemsInProgress.map((item, index) => {
             return (
                 <Box
-                backgroundColor="green.200"
+                backgroundColor="green.500"
                 p="4"
                 borderRadius="md"
                 key={index}
@@ -74,6 +107,7 @@ export interface Item {
               <Text key={index}>
                 {item.name} ({formatTime(item.duration)})
               </Text>
+              <ListItemIconButtons item={item} handleEdit={handleEdit} handleRemove={handleRemove} />
                     </Box>
             );
           })}
