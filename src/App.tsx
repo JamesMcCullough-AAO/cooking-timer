@@ -3,6 +3,7 @@ import { AddItemForm } from './components/AddItemForm';
 import { Item, ItemList } from './components/ItemList';
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react';
 import { EditItemModal } from './components/EditItemModal';
+import Snowflake from './components/Snowflakes';
 
 const App: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
@@ -65,12 +66,15 @@ const App: React.FC = () => {
   }, [isTimerActive, masterTimer]);
 
   return (
+    <div>
+<Snowflake />
     <VStack
     backgroundColor="black"
     color="white"
     flex="1"
     height="100vh"
     padding="4"
+    zIndex="1"
     >
       <AddItemForm onAdd={addItem} />
       <HStack
@@ -79,6 +83,7 @@ const App: React.FC = () => {
       >
       <Button
         colorScheme={isTimerActive ? 'red' : 'green'}
+        zIndex="1"
         onClick={() => 
           {
             if(isTimerActive) {
@@ -87,7 +92,6 @@ const App: React.FC = () => {
               setIsTimerActive(true)
             }
           }
-          
           } 
         mt="4"
         disabled={isTimerActive}
@@ -96,6 +100,7 @@ const App: React.FC = () => {
       </Button>
       <Button
         colorScheme="red"
+        zIndex="1"
         onClick={() => {
           setIsTimerActive(false);
           // Reset the master timer to the highest duration
@@ -109,6 +114,7 @@ const App: React.FC = () => {
       </Button>
       <Button
         colorScheme="blue"
+        zIndex="1"
         onClick={() => {
           const time = prompt('Set the Time in Minutes');
           if (time) {
@@ -129,15 +135,19 @@ const App: React.FC = () => {
       height="100%"
       >
         <Box
-         mt="4" 
+         backgroundColor="rgba(0, 0, 0, 0.5)"
+         zIndex="1"
          flex="1" 
-         alignItems="start" 
-         border="1px" borderColor="gray.400" borderRadius="md" p="4" height="100%"
+         alignItems="center" 
+         border="1px" 
+         borderColor="gray.400" 
+         borderRadius="md" 
          display="flex"
          justifyContent="center"
          flexDirection="column"
+          height="100%"
         >
-      <Text fontSize="8xl" mt="4" textAlign="center" width="100%"
+      <Text fontSize="8xl" mt="4" textAlign="center" width="100%" zIndex="1"
       color={isTimerActive ? 'white': 'blue.300'}
       >
         {Math.floor(masterTimer / 60)}:{(masterTimer % 60).toString().padStart(2, '0')}
@@ -161,6 +171,7 @@ const App: React.FC = () => {
         onSave={handleSave}
       />
     </VStack>
+    </div>
   );
 };
 

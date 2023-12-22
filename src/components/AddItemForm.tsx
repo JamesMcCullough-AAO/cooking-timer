@@ -26,18 +26,23 @@ export const AddItemForm: React.FC<AddItemFormProps> = ({ onAdd, initialName = '
           placeholder="Item name" 
           value={name} 
           onChange={(e) => setName(e.target.value)} 
+          zIndex="1"
+          backgroundColor="black"
         />
         <Input 
           placeholder="Time in minutes" 
           type="number"
           value={time} 
           onChange={(e) => setTime(e.target.value)} 
+          zIndex="1"
+          backgroundColor="black"
         />
         <IconButton 
         aria-label="Add item"
         icon={<AddIcon />}
         type="submit" 
         colorScheme="blue"
+        zIndex="1"
         />
       </HStack>
     </form>

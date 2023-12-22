@@ -74,7 +74,7 @@ export interface Item {
         backgroundColor="black"
         color="white"
         >
-        <VStack mt="4" flex="1" alignItems="start" border="1px" borderColor="gray.400" borderRadius="md" p="4" height="100%"
+        <VStack flex="1" alignItems="start" border="1px" borderColor="gray.400" borderRadius="md" p="4" height="100%" zIndex="1" backgroundColor="rgba(0, 0, 0, 0.5)"
         >
         {itemsToStart.map((item, index) => {
           const beginIn = Math.max(masterTimer - item.duration, 0);
@@ -94,7 +94,7 @@ export interface Item {
           );
         })}
       </VStack>
-      <VStack mt="4" flex="1" alignItems="start" border="1px" borderColor="gray.400" borderRadius="md" p="4" height="100%">
+      <VStack flex="1" alignItems="start" border="1px" borderColor="gray.400" borderRadius="md" p="4" height="100%" zIndex="1" backgroundColor="rgba(0, 0, 0, 0.5)">
           {itemsInProgress.map((item, index) => {
             return (
                 <Box

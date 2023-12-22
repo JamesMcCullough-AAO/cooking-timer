@@ -11,3 +11,22 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@keyframes snowfall {
+  0% { top: -10%; }
+  100% { top: 100%;
+    rotate: 60deg; }
+}
+
+.snowflake {
+  position: fixed;
+  top: -30%;
+  z-index: 1; /* Adjust as needed to ensure snowflakes are in the background */
+  opacity: 0.6; /* Adjust for desired transparency */
+  color: #FFF; /* Snowflake color */
+  font-size: 1em; /* Adjust for size of snowflakes */
+  animation-name: snowfall;
+  animation-duration: 10s; /* Adjust for speed of falling */
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
