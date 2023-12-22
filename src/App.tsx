@@ -1,26 +1,88 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import { AddItemForm } from './components/AddItemForm';
+import { Item, ItemList } from './components/ItemList';
+import { Box, Button, HStack, Text } from '@chakra-ui/react';
 
-function App() {
+const App: React.FC = () => {
+  const [items, setItems] = useState<Item[]>([]);
+  const [isTimerActive, setIsTimerActive] = useState(false);
+  const [masterTimer, setMasterTimer] = useState(0);
+
+  const addItem = (name: string, duration: number) => {
+    const durationInSeconds = duration * 60;
+    const beginAt = masterTimer - durationInSeconds; // When to start cooking
+    setItems([...items, { name: name, duration: durationInSeconds, beginAt }]);
+    setMasterTimer(prev => Math.max(prev, durationInSeconds));
+  };
+
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (isTimerActive && masterTimer > 0) {
+      timer = setInterval(() => {
+        setMasterTimer(prev => prev - 1);
+      }, 1000); // Every second
+    } else if (masterTimer === 0) {
+      setIsTimerActive(false); // Stop the timer when it reaches 0
+    }
+
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [isTimerActive, masterTimer]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div>
+      <AddItemForm onAdd={addItem} />
+      <Button
+        colorScheme={isTimerActive ? 'red' : 'green'}
+        onClick={() => 
+          {
+            if(isTimerActive) {
+              setIsTimerActive(false)
+            } else {
+              setIsTimerActive(true)
+            }
+          }
+          
+          } 
+        mt="4"
+        disabled={isTimerActive}
+      >
+        {isTimerActive ? 'Pause' : 'Start'}
+      </Button>
+      <HStack
+      justifyContent="space-between"
+      height="80vh"
+      >
+        <Box
+         mt="4" 
+         flex="1" 
+         alignItems="start" 
+         border="1px" borderColor="gray.400" borderRadius="md" p="4" height="100%"
+         display="flex"
+         justifyContent="center"
+          flexDirection="column"
         >
-          Learn React
-        </a>
-      </header>
+      <Text fontSize="8xl" mt="4" textAlign="center" width="100%"
+      >
+        {Math.floor(masterTimer / 60)}:{(masterTimer % 60).toString().padStart(2, '0')}
+      </Text>
+        </Box>
+      <Box
+        flex="2"
+        backgroundColor="white"
+        height="100%"
+         display="flex"
+         flexDirection="column"
+         justifyContent="center"
+        >
+      <ItemList items={items} masterTimer={masterTimer} />
+        </Box>
+      </HStack>
     </div>
   );
-}
+};
 
 export default App;
