@@ -1,15 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { AddItemForm } from "./components/AddItemForm";
 import { Item, ItemList } from "./components/ItemList";
-import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  HStack,
+  IconButton,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { EditItemModal } from "./components/EditItemModal";
 import Snowflake from "./components/Snowflakes";
+import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
+import PauseCircleOutlineIcon from "@mui/icons-material/PauseCircleOutline";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
+import TimerIcon from "@mui/icons-material/Timer";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 
 const App: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [masterTimer, setMasterTimer] = useState(0);
   const [editingItem, setEditingItem] = useState<Item | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   const addItem = (name: string, duration: number) => {
     const durationInSeconds = duration * 60;
@@ -64,6 +83,24 @@ const App: React.FC = () => {
     };
   }, [isTimerActive, masterTimer]);
 
+  const getNextItems = () => {
+    const nextItems = items
+      .filter((item) => item.duration < masterTimer)
+      .sort((a, b) => b.duration - a.duration)
+      .filter((item, index, array) => item.duration === array[0].duration)
+      .map((item) => item.name);
+    return nextItems.join(", ");
+  };
+
+  const getNextItemTimer = () => {
+    const nextItems = items
+      .filter((item) => item.duration < masterTimer)
+      .sort((a, b) => b.duration - a.duration);
+
+    // return the duration of the next first item
+    return masterTimer - nextItems[0].duration;
+  };
+
   return (
     <div>
       <Snowflake />
@@ -75,7 +112,6 @@ const App: React.FC = () => {
         padding="4"
         zIndex="1"
       >
-        <AddItemForm onAdd={addItem} />
         <HStack justifyContent="space-between" width="100%" height="100%">
           <Box
             backgroundColor="rgba(0, 0, 0, 0.5)"
@@ -101,8 +137,26 @@ const App: React.FC = () => {
                 {Math.floor(masterTimer / 60)}:
                 {(masterTimer % 60).toString().padStart(2, "0")}
               </Text>
+              <Text
+                fontSize="2xl"
+                textAlign="center"
+                width="100%"
+                zIndex="1"
+                color={isTimerActive ? "white" : "blue.100"}
+              >
+                Next: {getNextItems()} in {Math.floor(getNextItemTimer() / 60)}:
+                {(getNextItemTimer() % 60).toString().padStart(2, "0")}
+              </Text>
               <HStack flex="1" justifyContent="center">
-                <Button
+                <IconButton
+                  aria-label={isTimerActive ? "Pause Timer" : "Start Timer"}
+                  icon={
+                    isTimerActive ? (
+                      <PauseCircleOutlineIcon />
+                    ) : (
+                      <PlayCircleOutlineIcon />
+                    )
+                  }
                   colorScheme={isTimerActive ? "red" : "green"}
                   zIndex="1"
                   onClick={() => {
@@ -114,10 +168,10 @@ const App: React.FC = () => {
                   }}
                   mt="4"
                   disabled={isTimerActive}
-                >
-                  {isTimerActive ? "Pause" : "Start"}
-                </Button>
-                <Button
+                />
+                <IconButton
+                  aria-label="Reset Timer"
+                  icon={<StopCircleIcon />}
                   colorScheme="red"
                   zIndex="1"
                   onClick={() => {
@@ -130,10 +184,10 @@ const App: React.FC = () => {
                   mt="4"
                   disabled={isTimerActive}
                   isDisabled={isTimerActive}
-                >
-                  Reset
-                </Button>
-                <Button
+                />
+                <IconButton
+                  aria-label="Set Timer"
+                  icon={<TimerIcon />}
                   colorScheme="blue"
                   zIndex="1"
                   onClick={() => {
@@ -145,9 +199,17 @@ const App: React.FC = () => {
                   mt="4"
                   disabled={isTimerActive}
                   isDisabled={isTimerActive}
-                >
-                  Set Timer
-                </Button>
+                />
+                <IconButton
+                  aria-label="Add Items"
+                  icon={<PlaylistAddIcon />}
+                  colorScheme="purple"
+                  zIndex="1"
+                  onClick={() => setIsOpen(true)}
+                  mt="4"
+                  disabled={isTimerActive}
+                  isDisabled={isTimerActive}
+                />
               </HStack>
             </VStack>
           </Box>
@@ -175,6 +237,21 @@ const App: React.FC = () => {
           onSave={handleSave}
         />
       </VStack>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => {
+          setIsOpen(false);
+        }}
+      >
+        <ModalOverlay />
+        <ModalContent backgroundColor="gray.800" color="white">
+          <ModalHeader>Add Items</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <AddItemForm onAdd={addItem} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
