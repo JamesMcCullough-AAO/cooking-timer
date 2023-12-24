@@ -84,18 +84,26 @@ const App: React.FC = () => {
   }, [isTimerActive, masterTimer]);
 
   const getNextItems = () => {
+    // if there are no items, return nothing
+    if (items.length === 0) return "";
+
     const nextItems = items
       .filter((item) => item.duration < masterTimer)
       .sort((a, b) => b.duration - a.duration)
-      .filter((item, index, array) => item.duration === array[0].duration)
+      .filter((item, index, array) => item.duration === array?.[0]?.duration)
       .map((item) => item.name);
     return nextItems.join(", ");
   };
 
   const getNextItemTimer = () => {
+    // if there are no items, return nothing
+    if (items.length === 0) return 0;
+
     const nextItems = items
       .filter((item) => item.duration < masterTimer)
       .sort((a, b) => b.duration - a.duration);
+
+    if (nextItems.length === 0) return 0;
 
     // return the duration of the next first item
     return masterTimer - nextItems[0].duration;
@@ -142,7 +150,7 @@ const App: React.FC = () => {
                 textAlign="center"
                 width="100%"
                 zIndex="1"
-                color={isTimerActive ? "white" : "blue.100"}
+                color={isTimerActive ? "purple.300" : "blue.100"}
               >
                 Next: {getNextItems()} in {Math.floor(getNextItemTimer() / 60)}:
                 {(getNextItemTimer() % 60).toString().padStart(2, "0")}
