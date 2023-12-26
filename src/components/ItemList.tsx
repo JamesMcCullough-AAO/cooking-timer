@@ -6,7 +6,6 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 export interface Item {
   name: string;
   duration: number;
-  beginAt: number;
 }
 
 interface ItemListProps {

@@ -32,9 +32,9 @@ const App: React.FC = () => {
 
   const addItem = (name: string, duration: number) => {
     const durationInSeconds = duration * 60;
-    const beginAt = masterTimer - durationInSeconds; // When to start cooking
-    setItems([...items, { name: name, duration: durationInSeconds, beginAt }]);
-    setMasterTimer((prev) => Math.max(prev, durationInSeconds));
+    setItems([...items, { name: name, duration: durationInSeconds }]);
+    if (!isTimerActive)
+      setMasterTimer((prev) => Math.max(prev, durationInSeconds));
   };
 
   const handleEdit = (item: Item) => {
@@ -216,8 +216,6 @@ const App: React.FC = () => {
                   zIndex="1"
                   onClick={() => setIsOpen(true)}
                   mt="4"
-                  disabled={isTimerActive}
-                  isDisabled={isTimerActive}
                 />
               </HStack>
             </VStack>
