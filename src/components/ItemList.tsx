@@ -55,15 +55,18 @@ export const ItemList: React.FC<ItemListProps> = ({
   const playedSoundsRef = useRef<Set<number>>(new Set());
 
   useEffect(() => {
+    let soundPlayed = false;
     items.forEach((item, index) => {
       const beginIn = masterTimer - item.duration;
       if (
         beginIn === 0 &&
         !playedSoundsRef.current.has(index) &&
-        isTimerActive
+        isTimerActive &&
+        !soundPlayed
       ) {
         new Audio("/bells.wav").play();
         playedSoundsRef.current.add(index);
+        soundPlayed = true;
       }
     });
   }, [items, masterTimer]);
