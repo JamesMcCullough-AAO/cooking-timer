@@ -58,7 +58,8 @@ const App: React.FC = () => {
     setItems(newItems);
 
     // Set the master timer to the highest duration
-    setMasterTimer(Math.max(...newItems.map((item) => item.duration)));
+    if (!isTimerActive)
+      setMasterTimer(Math.max(...newItems.map((item) => item.duration)));
 
     setEditingItem(null);
   };
